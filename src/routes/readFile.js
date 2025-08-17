@@ -62,5 +62,37 @@ readRouter.get('/read',async(req,res)=>{
     }
 })
 
+readRouter.get('/open/file',(req,res)=>{
+
+    fs.open(readFile,"r",(err,fd)=>{
+        if (err) {
+    return console.error("Error opening file:", err);
+  }
+    console.log("File opened successfully, file descriptor:", fd);
+    fs.close(fd, () => console.log("File closed."));
+    })
+    res.status(200).json({
+    success : true,
+    message : 'File Open successfully'
+})
+})
+
+const oldPath = path.join(__dirname,'files','Hello.txt');
+const newPath = path.join(__dirname,'files','source.txt')
+
+readRouter.get("/rename/file",(req,res)=>{
+
+    fs.rename(oldPath, newPath, (err) => {
+        if (err) {
+            return console.error("Error renaming/moving file:", err);
+          }
+    })
+
+    res.status(200).json({
+        success: true,
+        message : 'File renamed successfully'
+    })
+})
+
 
 module.exports = readRouter;
